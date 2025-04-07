@@ -332,13 +332,12 @@ func monitorConnection(client *Client, room *Room) {
 
 func RegisterNewSocketServer(host, port string) {
 	server := NewSocketServer()
-
 	listener, err := net.Listen("tcp", fmt.Sprintf("%s:%s", host, port))
 	if err != nil {
-		log.Fatalf("Failed to start server: %v", err)
+		log.Fatalf("failed to start server on %s:%s err: %v", host, port, err)
 	}
 
-	log.Infof("Socket server started on :26388")
+	log.Infof("socket server started on %s:%s", host, port)
 	for {
 		conn, err := listener.Accept()
 		if err != nil {

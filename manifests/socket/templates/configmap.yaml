@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: tcp-services
+  namespace: ingress-nginx # Yes this cm must go to the ingress-nginx namespace
+data:
+  # Format is: <external-port>: "<namespace>/<service-name>:<service-port>"
+  26388: "{{.Values.namespace}}/{{.Values.name}}-svc:{{.Values.service.port}}"

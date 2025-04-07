@@ -27,7 +27,7 @@ spec:
             - "-port"
             - {{.Values.service.targetPort | quote }}
             - "-host"
-            - "kraken-plugins.duckdns.org"
+            - "0.0.0.0"
           ports:
             - containerPort: {{.Values.service.targetPort}}
               name: tcp
