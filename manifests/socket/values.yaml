@@ -1,0 +1,29 @@
+name: kraken-sockets
+namespace: kraken
+replicaCount: 1
+
+image:
+  repository: cbartram/kraken-sockets
+  pullPolicy: IfNotPresent
+  tag: "0.0.1"
+
+serviceAccountName: kraken-api-sa
+
+service:
+  type: ClusterIP
+  port: 26388
+  targetPort: 26388
+
+resources:
+  limits:
+    cpu: 100m
+    memory: 128Mi
+  requests:
+    cpu: 100m
+    memory: 128Mi
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 3
+  targetCPUUtilizationPercentage: 80
