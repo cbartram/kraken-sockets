@@ -5,7 +5,6 @@ import (
 	"crypto/sha1"
 	"encoding/base64"
 	"encoding/hex"
-	log "github.com/sirupsen/logrus"
 )
 
 // Hash implements SHA256 encryption
@@ -41,31 +40,24 @@ func PKCS5Unpadding(data []byte) []byte {
 
 // GenerateAESKey generates a 16-byte key using SHA1
 func GenerateAESKey(secret string) []byte {
-	// Generate key using SHA1 as in Java implementation
 	hasher := sha1.New()
 	hasher.Write([]byte(secret))
 	key := hasher.Sum(nil)
 
-	// Truncate to 16 bytes (128 bits for AES)
 	return key[:16]
 }
 
 // EncryptAES encrypts plaintext using AES/ECB/PKCS5Padding
 func EncryptAES(secret, plaintext string) string {
-	// Generate key
 	key := GenerateAESKey(secret)
 
-	// Create cipher
 	block, err := aes.NewCipher(key)
 	if err != nil {
-		log.Println("Encryption error:", err)
 		return ""
 	}
 
-	// Add padding
 	data := PKCS5Padding([]byte(plaintext), block.BlockSize())
 
-	// ECB mode encryption
 	encrypted := make([]byte, len(data))
 	size := block.BlockSize()
 
@@ -73,30 +65,23 @@ func EncryptAES(secret, plaintext string) string {
 		block.Encrypt(encrypted[bs:be], data[bs:be])
 	}
 
-	// Convert to base64
 	return base64.StdEncoding.EncodeToString(encrypted)
 }
 
 // DecryptAES decrypts ciphertext using AES/ECB/PKCS5Padding
 func DecryptAES(secret, ciphertext string) string {
-	// Decode base64
 	data, err := base64.StdEncoding.DecodeString(ciphertext)
 	if err != nil {
-		log.Println("Decryption base64 error:", err)
 		return ""
 	}
 
-	// Generate key
 	key := GenerateAESKey(secret)
 
-	// Create cipher
 	block, err := aes.NewCipher(key)
 	if err != nil {
-		log.Println("Decryption cipher error:", err)
 		return ""
 	}
 
-	// ECB mode decryption
 	decrypted := make([]byte, len(data))
 	size := block.BlockSize()
 
