@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: kraken-nodeport-svc
+  namespace: {{.Values.namespace}}
+  labels:
+    app: {{.Values.name}}
+spec:
+  type: NodePort
+  ports:
+    - port: 26388          # Port that the service exposes
+      targetPort: 26388    # Port on your pod/container
+      nodePort: 30388      # External port (30000-32767 range)
+      protocol: TCP
+      name: tcp-26388
+  selector:
+    app: {{.Values.name}}
